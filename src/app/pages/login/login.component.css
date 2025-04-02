@@ -1,0 +1,135 @@
+/* Estilos para el login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f1e3;
+  background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff');
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0e6d2;
+}
+
+.login-header {
+  padding: 30px;
+  text-align: center;
+  background-color: #f8e8c8;
+  border-bottom: 3px solid #d4a76a;
+}
+
+.login-title {
+  color: #8b4513;
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-size: 1.8rem;
+}
+
+.login-subtitle {
+  color: #a67c52;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.login-body {
+  padding: 30px;
+}
+
+.form-label {
+  color: #8b4513;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #f0e6d2;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  border-color: #d4a76a;
+  box-shadow: 0 0 0 0.25rem rgba(210, 165, 105, 0.25);
+}
+
+.btn-login {
+  background-color: #8b4513;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #a05c2c;
+  transform: translateY(-2px);
+}
+
+.btn-login:disabled {
+  background-color: #b3a18d;
+  transform: none;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.login-footer {
+  padding: 15px;
+  text-align: center;
+  background-color: #f8f1e3;
+  border-top: 1px solid #f0e6d2;
+  font-size: 0.8rem;
+  color: #a67c52;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.invalid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}

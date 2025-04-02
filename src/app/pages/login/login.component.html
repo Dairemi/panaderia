@@ -1,0 +1,73 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 class="login-title">🍪 Panadería "Mil hojas" 🥐</h1>
+      <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+    </div>
+
+    <div class="login-body">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-4">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="tu@email.com"
+            [class.is-invalid]="form.get('email')?.invalid && (form.get('email')?.touched || error)">
+          @if(form.get('email')?.touched && form.get('email')?.invalid || error){
+            <div class="invalid-feedback">
+              @if(form.get('email')?.errors?.['required']){
+                <span>Email es requerido</span>
+              }
+              @if(form.get('email')?.errors?.['pattern']){
+                <span>Ingresa un email válido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="password"
+            [class.is-invalid]="form.get('password')?.invalid && (form.get('password')?.touched || error)">
+          @if(form.get('password')?.touched && form.get('password')?.invalid || error){
+            <div class="invalid-feedback">
+              @if(form.get('password')?.errors?.['required']){
+                <span>Contraseña es requerida</span>
+              }
+            </div>
+          }
+        </div>
+
+        @if(error){
+          <div class="alert alert-danger mb-4">
+            Credenciales incorrectas. Por favor intenta nuevamente.
+          </div>
+        }
+
+        <div class="d-grid">
+          <button
+            type="submit"
+            class="btn btn-login"
+            [disabled]="isLoading">
+            @if(isLoading){
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Verificando...
+            } @else {
+              <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="login-footer">
+      <p class="text-muted">© 2025 Panadería "Mil hojas"- Todos los derechos reservados</p>
+    </div>
+  </div>
+</div>

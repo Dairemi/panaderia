@@ -1,0 +1,57 @@
+<div style="margin: 20px;">
+  <h1>Gestión de Clientes</h1>
+
+  <div class="mb-3">
+    <a routerLink="/productos" class="btn btn-primary me-2">Gestión de Productos</a>
+    <a routerLink="/home" class="btn btn-secondary">Ir a Inicio</a>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>N° Cliente</th>
+        <th>Nombre</th>
+        <th>Método de Pago</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cliente of clientes; track cliente.id) {
+        <tr>
+          <td>{{ cliente.nCliente }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.metodoPago }}</td>
+          <td>
+            <button (click)="selectCliente(cliente)" class="btn btn-sm btn-warning me-2">Editar</button>
+            <button (click)="deleteCliente(cliente)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4>Formulario de Cliente</h4>
+    </div>
+    <div class="card-body">
+      <div class="form-group mb-3">
+        <label>N° Cliente:</label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.nCliente" required>
+      </div>
+      <div class="form-group mb-3">
+        <label>Nombre:</label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.nombre" required>
+      </div>
+      <div class="form-group mb-3">
+        <label>Método de Pago:</label>
+        <input type="text" class="form-control" [(ngModel)]="cliente.metodoPago">
+      </div>
+      <div>
+        <button (click)="insertarCliente()" class="btn btn-success me-2">Agregar</button>
+        <button (click)="updateCliente()" class="btn btn-primary me-2">Actualizar</button>
+        <button (click)="limpiarFormulario()" class="btn btn-secondary">Limpiar</button>
+      </div>
+    </div>
+  </div>
+</div>

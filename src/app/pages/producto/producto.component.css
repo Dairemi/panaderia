@@ -1,0 +1,34 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+table th, table td {
+  text-align: center;
+}
+
+table {
+  margin-top: 30px;
+}
+
+button {
+  width: 250px;
+}
+
+input[type="number"],
+input[type="text"] {
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #2C3E50;
+}
+
+h3 {
+  color: #E74C3C;
+}
+
+hr {
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,53 @@
+<div style="margin: 20px;">
+  <h1>Gestión de Productos</h1>
+
+  <div class="mb-3">
+    <a routerLink="/clientes" class="btn btn-primary me-2">Gestión de Clientes</a>
+    <a routerLink="/home" class="btn btn-secondary">Ir a Inicio</a>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (producto of productos; track producto.id) {
+        <tr>
+          <td>{{ producto.id }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.precio | currency }}</td>
+          <td>
+            <button (click)="selectProducto(producto)" class="btn btn-sm btn-warning me-2">Editar</button>
+            <button (click)="deleteProducto(producto)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4>Formulario de Producto</h4>
+    </div>
+    <div class="card-body">
+      <div class="form-group mb-3">
+        <label>Descripción:</label>
+        <input type="text" class="form-control" [(ngModel)]="producto.descripcion">
+      </div>
+      <div class="form-group mb-3">
+        <label>Precio:</label>
+        <input type="number" class="form-control" [(ngModel)]="producto.precio">
+      </div>
+      <div>
+        <button (click)="insertarProducto()" class="btn btn-success me-2">Agregar</button>
+        <button (click)="updateProducto()" class="btn btn-primary me-2">Actualizar</button>
+        <button (click)="limpiarFormulario()" class="btn btn-secondary">Limpiar</button>
+      </div>
+    </div>
+  </div>
+</div>

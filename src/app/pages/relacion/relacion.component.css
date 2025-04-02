@@ -1,0 +1,215 @@
+.panaderia-container {
+  background-color: #fff9e6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+.panaderia-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8e8c8;
+  border-radius: 10px;
+  border-bottom: 3px solid #d4a76a;
+}
+
+.panaderia-title {
+  color: #8b4513;
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.panaderia-table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.panaderia-table th {
+  background-color: #8b4513 !important;
+  color: white !important;
+}
+
+.panaderia-table tr:hover {
+  background-color: #fff0d1 !important;
+}
+
+.btn-insertar {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.btn-insertar:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-logout {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.btn-logout:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bg-brown {
+  background-color: #8b4513 !important;
+}
+
+.panaderia-modal .modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid #d4a76a;
+}
+
+.panaderia-modal .form-control {
+  border-radius: 5px;
+  border: 1px solid #d4a76a;
+}
+
+.panaderia-modal .form-control:focus {
+  border-color: #8b4513;
+  box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
+}
+
+.table td:first-child {
+  font-weight: bold;
+  color: #8b4513;
+}
+
+/* Estilos para la temática de panadería */
+.panaderia-container {
+  background-color: #fff9e6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+.panaderia-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8e8c8;
+  border-radius: 10px;
+  border-bottom: 3px solid #d4a76a;
+}
+
+.panaderia-title {
+  color: #8b4513;
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.panaderia-table {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.panaderia-table th {
+  background-color: #8b4513 !important;
+  color: white !important;
+}
+
+.panaderia-table tr:hover {
+  background-color: #fff0d1 !important;
+}
+
+.btn-insertar {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.btn-insertar:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-logout {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.btn-logout:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bg-brown {
+  background-color: #8b4513 !important;
+}
+
+.panaderia-modal .modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid #d4a76a;
+}
+
+.panaderia-modal .form-control {
+  border-radius: 5px;
+  border: 1px solid #d4a76a;
+}
+
+.panaderia-modal .form-control:focus {
+  border-color: #8b4513;
+  box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
+}
+
+/* Estilos para números de cliente ordenados */
+.table td:first-child {
+  font-weight: bold;
+  color: #8b4513;
+}
+
+/* Estilos para la alerta */
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  color: #856404;
+  border-radius: 8px;
+}
