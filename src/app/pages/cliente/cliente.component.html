@@ -20,7 +20,6 @@
         <tr>
           <td>{{ cliente.nCliente }}</td>
           <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.metodoPago }}</td>
           <td>
             <button (click)="selectCliente(cliente)" class="btn btn-sm btn-warning me-2">Editar</button>
             <button (click)="deleteCliente(cliente)" class="btn btn-sm btn-danger">Eliminar</button>
@@ -45,7 +44,6 @@
       </div>
       <div class="form-group mb-3">
         <label>Método de Pago:</label>
-        <input type="text" class="form-control" [(ngModel)]="cliente.metodoPago">
       </div>
       <div>
         <button (click)="insertarCliente()" class="btn btn-success me-2">Agregar</button>

@@ -17,8 +17,7 @@ export class ClienteComponent {
   cliente: Cliente = {
     id: '',
     nCliente: '',
-    nombre: '',
-    metodoPago: ''
+    nombre: ''
   };
 
   constructor(private clienteService: ClienteService) {
@@ -74,7 +73,6 @@ export class ClienteComponent {
       id: '',
       nCliente: '',
       nombre: '',
-      metodoPago: ''
     };
   }
 }

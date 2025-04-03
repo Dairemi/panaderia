@@ -1,6 +1,5 @@
-export class Cliente {
+export interface Cliente {
   id?: string;
-  nCliente!: string;
-  nombre!: string;
-  metodoPago: string = '';
+  nCliente: string;
+  nombre: string;
 }
