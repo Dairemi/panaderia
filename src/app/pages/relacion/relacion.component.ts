@@ -14,12 +14,6 @@ interface RegistroForm {
   nombre?: string;
   descripcion?: string;
   precio?: number;
-  clienteId?: string;
-}
-
-interface RelacionForm {
-  clienteId: string;
-  productoId: string;
 }
 
 @Component({
@@ -38,7 +32,7 @@ export class RelacionComponent implements OnInit {
   showRelacionForm = false;
   formType: 'create' | 'edit' = 'create';
   registroForm: RegistroForm = {};
-  relacionForm: RelacionForm = {
+  relacionForm = {
     clienteId: '',
     productoId: ''
   };
@@ -58,26 +52,13 @@ export class RelacionComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.clienteService.getClientes().subscribe({
-      next: (clientes) => {
-        this.clientes = clientes.sort((a, b) => parseInt(a.nCliente) - parseInt(b.nCliente));
-        this.calculateNextClienteNumber();
-
-        this.productoService.getProductos().subscribe({
-          next: (productos) => {
-            this.productos = productos;
-            this.combinarDatos();
-          },
-          error: (error) => {
-            console.error('Error al cargar productos:', error);
-            this.errorMessage = 'Error al cargar los productos';
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error al cargar clientes:', error);
-        this.errorMessage = 'Error al cargar los clientes';
-      }
+    this.clienteService.getClientes().subscribe(clientes => {
+      this.clientes = clientes.sort((a, b) => parseInt(a.nCliente) - parseInt(b.nCliente));
+      this.calculateNextClienteNumber();
+      this.productoService.getProductos().subscribe(productos => {
+        this.productos = productos;
+        this.combinarDatos();
+      });
     });
   }
 
@@ -91,31 +72,29 @@ export class RelacionComponent implements OnInit {
   }
 
   combinarDatos(): void {
-    this.datosCombinados = this.productos
-      .filter(p => p.clienteId)
-      .map(producto => {
-        const cliente = this.clientes.find(c => c.id === producto.clienteId);
-        return {
-          id: producto.id,
-          nCliente: cliente?.nCliente || 'Sin número',
-          nombreCliente: cliente?.nombre || 'Cliente no encontrado',
-          nombrePan: producto.descripcion,
-          precio: producto.precio,
-          clienteId: cliente?.id,
-          productoId: producto.id,
-          productoData: producto,
-          clienteData: cliente
-        };
-      })
-      .sort((a, b) => {
-        const numA = parseInt(a.nCliente) || 0;
-        const numB = parseInt(b.nCliente) || 0;
-        return numA - numB;
-      });
-  }
+    this.datosCombinados = [];
 
-  productosFiltrados(): Producto[] {
-    return this.productos.filter(p => !p.clienteId);
+    this.productos.forEach(producto => {
+      if (producto.clienteIds && producto.clienteIds.length > 0) {
+        producto.clienteIds.forEach(clienteId => {
+          const cliente = this.clientes.find(c => c.id === clienteId);
+          if (cliente) {
+            this.datosCombinados.push({
+              clienteId: cliente.id,
+              productoId: producto.id,
+              nCliente: cliente.nCliente,
+              nombreCliente: cliente.nombre,
+              nombreProducto: producto.descripcion,
+              precio: producto.precio,
+              productoData: producto,
+              clienteData: cliente
+            });
+          }
+        });
+      }
+    });
+
+    this.datosCombinados.sort((a, b) => parseInt(a.nCliente) - parseInt(b.nCliente));
   }
 
   changeView(view: 'combined' | 'clientes' | 'panaderia'): void {
@@ -144,11 +123,18 @@ export class RelacionComponent implements OnInit {
         return;
       }
 
-      await this.productoService.modificarProducto({
-        ...producto,
-        clienteId: this.relacionForm.clienteId
-      });
+      // Verificar si ya existe la relación
+      if (producto.clienteIds?.includes(this.relacionForm.clienteId)) {
+        this.errorMessage = 'Esta relación ya existe';
+        return;
+      }
 
+      const updatedProducto: Producto = {
+        ...producto,
+        clienteIds: [...(producto.clienteIds || []), this.relacionForm.clienteId]
+      };
+
+      await this.productoService.modificarProducto(updatedProducto);
       this.showRelacionForm = false;
       this.cargarDatos();
     } catch (error) {
@@ -161,10 +147,15 @@ export class RelacionComponent implements OnInit {
     if (!confirm('¿Eliminar esta relación permanentemente?')) return;
 
     try {
-      await this.productoService.modificarProducto({
-        ...item.productoData,
-        clienteId: null
-      });
+      const producto = this.productos.find(p => p.id === item.productoId);
+      if (!producto) return;
+
+      const updatedProducto: Producto = {
+        ...producto,
+        clienteIds: producto.clienteIds?.filter(id => id !== item.clienteId) || []
+      };
+
+      await this.productoService.modificarProducto(updatedProducto);
       this.cargarDatos();
     } catch (error) {
       console.error('Error al eliminar relación:', error);
@@ -237,7 +228,7 @@ export class RelacionComponent implements OnInit {
           await this.productoService.agregarProducto({
             descripcion: this.registroForm.descripcion || '',
             precio: this.registroForm.precio || 0,
-            clienteId: null
+            clienteIds: []
           });
         } else if (this.registroForm.id) {
           const productoExistente = this.productos.find(p => p.id === this.registroForm.id);
@@ -246,7 +237,7 @@ export class RelacionComponent implements OnInit {
               id: this.registroForm.id,
               descripcion: this.registroForm.descripcion || '',
               precio: this.registroForm.precio || 0,
-              clienteId: productoExistente.clienteId || null
+              clienteIds: productoExistente.clienteIds || []
             });
           }
         }
@@ -264,12 +255,17 @@ export class RelacionComponent implements OnInit {
     if (!confirm('¿Eliminar este cliente y todas sus relaciones?')) return;
 
     try {
-      const productosRelacionados = this.productos.filter(p => p.clienteId === cliente.id);
+      // Primero eliminamos las relaciones
+      const productosRelacionados = this.productos.filter(p =>
+        p.clienteIds?.includes(cliente.id || '')
+      );
+
       for (const producto of productosRelacionados) {
-        await this.productoService.modificarProducto({
+        const updatedProducto: Producto = {
           ...producto,
-          clienteId: null
-        });
+          clienteIds: producto.clienteIds?.filter(id => id !== cliente.id) || []
+        };
+        await this.productoService.modificarProducto(updatedProducto);
       }
 
       await this.clienteService.eliminarCliente(cliente);

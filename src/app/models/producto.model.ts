@@ -2,5 +2,5 @@ export interface Producto {
   id?: string;
   descripcion: string;
   precio: number;
-  clienteId?: string | null;
+  clienteIds?: string[]; // Array para múltiples clientes
 }

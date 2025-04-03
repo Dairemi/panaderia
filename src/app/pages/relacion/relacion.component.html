@@ -30,11 +30,11 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of datosCombinados; track item.id) {
+          @for (item of datosCombinados; track $index) {
             <tr>
               <td>{{ item.nCliente }}</td>
               <td>{{ item.nombreCliente }}</td>
-              <td>{{ item.nombrePan }}</td>
+              <td>{{ item.nombreProducto }}</td>
               <td>{{ item.precio | currency }}</td>
               <td>
                 <button (click)="eliminarRelacion(item)" class="btn btn-sm btn-danger">
@@ -181,7 +181,7 @@
                 <label class="form-label">Producto:</label>
                 <select class="form-control" [(ngModel)]="relacionForm.productoId" name="productoId" required>
                   <option value="">Seleccione un producto</option>
-                  @for (producto of productosFiltrados(); track producto.id) {
+                  @for (producto of productos; track producto.id) {
                     <option [value]="producto.id">{{ producto.descripcion }} - {{ producto.precio | currency }}</option>
                   }
                 </select>

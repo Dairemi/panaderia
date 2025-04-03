@@ -26,7 +26,7 @@ export class ProductoService {
     await updateDoc(documentRef, {
       descripcion: producto.descripcion,
       precio: producto.precio,
-      clienteId: producto.clienteId
+      clienteIds: producto.clienteIds || []  // Asegurarse de actualizar clienteIds
     });
   }
 
