@@ -1,24 +1,47 @@
-/* Estilos base - Fondo blanco y texto negro */
+/* ============ ESTILOS BASE ============ */
 .panaderia-container {
   background-color: #ffffff;
   min-height: 100vh;
   font-family: 'Montserrat', sans-serif;
   color: #000000;
   position: relative;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
+  overflow-x: hidden;
 }
 
-/* Encabezado - Rojo vino con texto blanco */
+/* ============ ENCABEZADO ============ */
 .panaderia-header {
   background: #6d1a1a;
   padding: 1rem 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 2px solid #8b2a2a;
+  position: relative;
+  z-index: 100;
 }
 
-/* Menú de navegación */
+.panaderia-brand {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  margin-right: auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.panaderia-brand:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  transform: scale(1.02);
+}
+
+/* ============ MENÚ NAVEGACIÓN ============ */
 .panaderia-menu {
   display: flex;
   gap: 1.8rem;
@@ -38,10 +61,12 @@
   align-items: center;
   gap: 8px;
   position: relative;
+  white-space: nowrap;
 }
 
 .btn-menu:hover {
   color: #ffcccc;
+  transform: translateY(-2px);
 }
 
 .btn-menu.active {
@@ -58,20 +83,45 @@
   background: #ffffff;
 }
 
-/* Título - Texto negro */
+/* ============ BANNER ============ */
+.banner-container {
+  width: 100%;
+  overflow: hidden;
+  max-height: 300px;
+  position: relative;
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============ TÍTULO DE PÁGINA ============ */
 .page-title {
   font-size: 2.3rem;
   font-weight: 700;
   font-family: 'Playfair Display', serif;
-  padding: 1.8rem 2rem 1.2rem;
-  margin: 0 0 0 2rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  padding: 1.8rem 0;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  width: 100%;
   color: #000000;
+  position: relative;
 }
 
-/* Contenido principal - Fondo blanco */
+.page-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 3px;
+  background: #6d1a1a;
+  margin: 0.8rem auto 0;
+}
+
+/* ============ CONTENIDO PRINCIPAL ============ */
 .main-content {
   padding: 2rem;
   background: #ffffff;
@@ -81,11 +131,12 @@
   border: 1px solid #e0e0e0;
 }
 
-/* Tabla - Fondo blanco con bordes */
+/* ============ TABLAS ============ */
 .table-responsive {
   background: #ffffff;
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 2.5rem;
   border: 1px solid #e0e0e0;
 }
@@ -95,6 +146,7 @@
   border-collapse: collapse;
   font-size: 1.05rem;
   background-color: #ffffff;
+  min-width: 600px;
 }
 
 .panaderia-table th {
@@ -131,7 +183,7 @@
   background-color: #f9f9f9;
 }
 
-/* Botones principales */
+/* ============ BOTONES ============ */
 .btn-insertar {
   background: #6d1a1a;
   color: #ffffff;
@@ -146,14 +198,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  margin: 1rem 0;
 }
 
 .btn-insertar:hover {
   background: #8b2a2a;
   transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 
-/* Botones de acción - Actualizados a color vino */
 .btn {
   padding: 0.6rem 1.1rem;
   border-radius: 4px;
@@ -172,24 +225,22 @@
   font-size: 0.92rem;
 }
 
-/* Botón Editar - Color vino claro */
 .btn-warning {
-  background: #8b2a2a; /* Color vino más claro */
+  background: #8b2a2a;
   color: white;
 }
 
 .btn-warning:hover {
-  background: #6d1a1a; /* Color vino original al hover */
+  background: #6d1a1a;
 }
 
-/* Botón Eliminar - Color vino oscuro */
 .btn-danger {
-  background: #5c1212; /* Color vino más oscuro */
+  background: #5c1212;
   color: white;
 }
 
 .btn-danger:hover {
-  background: #4a0e0e; /* Color vino más oscuro al hover */
+  background: #4a0e0e;
 }
 
 .btn-success {
@@ -214,7 +265,7 @@
   margin-right: 0.7rem;
 }
 
-/* Modales */
+/* ============ MODALES ============ */
 .modal {
   position: fixed;
   top: 0;
@@ -226,6 +277,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
 }
 
 .modal-content {
@@ -234,6 +286,10 @@
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   border: 1px solid #e0e0e0;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -244,6 +300,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .modal-title {
@@ -268,13 +327,14 @@
   color: #ffffff;
   opacity: 0.8;
   transition: opacity 0.2s;
+  line-height: 1;
 }
 
 .btn-close:hover {
   opacity: 1;
 }
 
-/* Formularios */
+/* ============ FORMULARIOS ============ */
 .form-control {
   background: #ffffff;
   border: 1px solid #e0e0e0;
@@ -304,7 +364,7 @@
   margin-bottom: 1.5rem;
 }
 
-/* Botón cerrar sesión */
+/* ============ BOTÓN CERRAR SESIÓN ============ */
 .btn-logout {
   position: fixed;
   bottom: 25px;
@@ -327,14 +387,17 @@
 .btn-logout:hover {
   background: #8b2a2a;
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Alertas */
+/* ============ ALERTAS ============ */
 .alert {
   padding: 1.1rem;
   border-radius: 4px;
   margin: 1.5rem 2rem;
   font-weight: 500;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
 }
 
 .alert-danger {
@@ -347,18 +410,22 @@
   text-align: right;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .panaderia-header {
-    justify-content: center;
-    padding: 1rem;
+/* ============ ANIMACIONES ============ */
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
   }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
-  .page-title {
-    font-size: 1.9rem;
-    padding: 1.2rem 1.5rem;
-    margin-left: 1rem;
-    gap: 8px;
+/* ============ RESPONSIVE: TABLET (768px - 1024px) ============ */
+@media (max-width: 1024px) {
+  .panaderia-header {
+    padding: 1rem;
   }
 
   .main-content {
@@ -366,61 +433,235 @@
     padding: 1.5rem;
   }
 
-  .panaderia-menu {
-    gap: 1.2rem;
+  .panaderia-table th,
+  .panaderia-table td {
+    padding: 0.8rem;
+    font-size: 0.95rem;
   }
 
-  .btn-menu {
-    font-size: 1.05rem;
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .btn-insertar {
+    padding: 1rem 1.8rem;
+  }
+}
+
+/* ============ RESPONSIVE: MÓVIL GRANDE (576px - 768px) ============ */
+@media (max-width: 768px) {
+  .panaderia-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+  }
+
+  .panaderia-brand {
+    margin-right: 0;
+    font-size: 1.4rem;
+    padding: 0.5rem;
+  }
+
+  .panaderia-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    padding: 1.2rem 0;
+  }
+
+  .page-title::after {
+    width: 80px;
+  }
+
+  .banner-container {
+    max-height: 200px;
+  }
+
+  .btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .main-content {
+    margin: 0.8rem;
+    padding: 1.2rem;
+  }
+
+  .alert {
+    margin: 1rem 0.8rem;
+  }
+}
+
+/* ============ RESPONSIVE: MÓVIL PEQUEÑO (hasta 576px) ============ */
+@media (max-width: 576px) {
+  .panaderia-brand {
+    font-size: 1.3rem;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 6px;
   }
 
   .panaderia-table th,
   .panaderia-table td {
-    padding: 0.9rem;
-    font-size: 0.98rem;
-  }
-
-  .modal-dialog {
-    width: 95%;
-  }
-
-  .alert {
-    margin: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .panaderia-menu {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.8rem;
-  }
-
-  .page-title {
-    font-size: 1.7rem;
-    padding: 1rem;
-    display: block;
-    text-align: center;
-    width: calc(100% - 2rem);
-    margin: 0 auto;
-    border-radius: 0;
+    padding: 0.6rem;
+    font-size: 0.85rem;
   }
 
   .btn-insertar {
-    width: 100%;
-    justify-content: center;
     padding: 1rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+  }
+
+  .btn-logout {
+    bottom: 15px;
+    right: 15px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .form-control {
+    padding: 0.6rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+  }
+
+  /* Stack para botones en celdas de tabla */
+  .panaderia-table td:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .me-2 {
+    margin-right: 0;
   }
 }
 
-.page-title {
-  font-size: 2.3rem;
-  font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  padding: 1.8rem 0; /* Ajusté el padding para mejor espaciado */
-  margin: 0 auto; /* Esto centrará el título */
-  display: block; /* Cambiado de inline-flex a block para mejor centrado */
-  text-align: center; /* Centra el texto */
-  width: 100%; /* Ocupa todo el ancho disponible */
-  color: #000000;
+/* ============ RESPONSIVE: MÓVIL MUY PEQUEÑO (hasta 400px) ============ */
+@media (max-width: 400px) {
+  .panaderia-brand {
+    font-size: 1.2rem;
+  }
+
+  .panaderia-menu {
+    gap: 0.5rem;
+  }
+
+  .btn-menu {
+    font-size: 1rem;
+    padding: 0.4rem 0;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .panaderia-table th,
+  .panaderia-table td {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    width: 98%;
+  }
+
+  .btn-logout {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ============ ORIENTACIÓN HORIZONTAL EN MÓVILES ============ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .panaderia-container {
+    padding-bottom: 70px;
+  }
+
+  .banner-container {
+    max-height: 150px;
+  }
+
+  .main-content {
+    padding: 0.8rem;
+    margin: 0.5rem;
+  }
+
+  .panaderia-table th,
+  .panaderia-table td {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 80vh;
+  }
+}
+
+/* ============ IMPRESIÓN ============ */
+@media print {
+  .panaderia-header,
+  .btn-logout,
+  .btn-insertar,
+  .panaderia-table td:last-child {
+    display: none !important;
+  }
+
+  .panaderia-container {
+    padding: 0;
+    background: white;
+  }
+
+  .main-content {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  .page-title {
+    padding: 1rem 0 0.5rem;
+  }
+
+  .panaderia-table {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .panaderia-table th {
+    background: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
