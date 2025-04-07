@@ -30,11 +30,18 @@ export class RelacionComponent implements OnInit {
 
   showForm = false;
   showRelacionForm = false;
+  showEditarRelacionForm = false;
   formType: 'create' | 'edit' = 'create';
   registroForm: RegistroForm = {};
   relacionForm = {
     clienteId: '',
     productoId: ''
+  };
+  relacionEditada = {
+    id: '',
+    clienteId: '',
+    productoId: '',
+    relacionOriginal: null as any
   };
   errorMessage: string | null = null;
   nextClienteNumber: number = 1;
@@ -110,57 +117,119 @@ export class RelacionComponent implements OnInit {
     this.errorMessage = null;
   }
 
-  async relacionarProductoCliente(): Promise<void> {
-    try {
-      if (!this.relacionForm.clienteId || !this.relacionForm.productoId) {
-        this.errorMessage = 'Debe seleccionar un cliente y un producto';
-        return;
-      }
-
-      const producto = this.productos.find(p => p.id === this.relacionForm.productoId);
-      if (!producto) {
-        this.errorMessage = 'Producto no encontrado';
-        return;
-      }
-
-      // Verificar si ya existe la relación
-      if (producto.clienteIds?.includes(this.relacionForm.clienteId)) {
-        this.errorMessage = 'Esta relación ya existe';
-        return;
-      }
-
-      const updatedProducto: Producto = {
-        ...producto,
-        clienteIds: [...(producto.clienteIds || []), this.relacionForm.clienteId]
-      };
-
-      await this.productoService.modificarProducto(updatedProducto);
-      this.showRelacionForm = false;
-      this.cargarDatos();
-    } catch (error) {
-      console.error('Error al relacionar:', error);
-      this.errorMessage = 'Error al relacionar producto con cliente';
-    }
+  openEditarRelacionForm(item: any): void {
+    this.relacionEditada = {
+      id: item.productoId,
+      clienteId: item.clienteId,
+      productoId: item.productoId,
+      relacionOriginal: item
+    };
+    this.showEditarRelacionForm = true;
+    this.errorMessage = null;
   }
 
-  async eliminarRelacion(item: any): Promise<void> {
-    if (!confirm('¿Eliminar esta relación permanentemente?')) return;
+  closeEditarRelacionForm(): void {
+    this.showEditarRelacionForm = false;
+    this.relacionEditada = {
+      id: '',
+      clienteId: '',
+      productoId: '',
+      relacionOriginal: null
+    };
+  }
 
-    try {
-      const producto = this.productos.find(p => p.id === item.productoId);
-      if (!producto) return;
-
-      const updatedProducto: Producto = {
-        ...producto,
-        clienteIds: producto.clienteIds?.filter(id => id !== item.clienteId) || []
-      };
-
-      await this.productoService.modificarProducto(updatedProducto);
-      this.cargarDatos();
-    } catch (error) {
-      console.error('Error al eliminar relación:', error);
-      this.errorMessage = 'Error al eliminar la relación';
+  relacionarProductoCliente(): void {
+    if (!this.relacionForm.clienteId || !this.relacionForm.productoId) {
+      this.errorMessage = 'Debe seleccionar un cliente y un producto';
+      return;
     }
+
+    const producto = this.productos.find(p => p.id === this.relacionForm.productoId);
+    if (!producto) {
+      this.errorMessage = 'Producto no encontrado';
+      return;
+    }
+
+    if (producto.clienteIds?.includes(this.relacionForm.clienteId)) {
+      this.errorMessage = 'Esta relación ya existe';
+      return;
+    }
+
+    const updatedProducto: Producto = {
+      ...producto,
+      clienteIds: [...(producto.clienteIds || []), this.relacionForm.clienteId]
+    };
+
+    this.productoService.modificarProducto(updatedProducto)
+      .then(() => {
+        this.showRelacionForm = false;
+        this.cargarDatos();
+      })
+      .catch(error => {
+        console.error('Error al relacionar:', error);
+        this.errorMessage = 'Error al relacionar producto con cliente';
+      });
+  }
+
+  guardarRelacionEditada(): void {
+    if (!this.relacionEditada.clienteId || !this.relacionEditada.productoId) {
+      this.errorMessage = 'Debe seleccionar un cliente y un producto';
+      return;
+    }
+
+    if (this.relacionEditada.clienteId === this.relacionEditada.relacionOriginal.clienteId &&
+        this.relacionEditada.productoId === this.relacionEditada.relacionOriginal.productoId) {
+      this.closeEditarRelacionForm();
+      return;
+    }
+
+    this.eliminarRelacion(this.relacionEditada.relacionOriginal, false)
+      .then(() => {
+        const producto = this.productos.find(p => p.id === this.relacionEditada.productoId);
+        if (producto) {
+          const updatedProducto: Producto = {
+            ...producto,
+            clienteIds: [...(producto.clienteIds || []), this.relacionEditada.clienteId]
+          };
+
+          return this.productoService.modificarProducto(updatedProducto);
+        }
+        return Promise.reject('Producto no encontrado');
+      })
+      .then(() => {
+        this.closeEditarRelacionForm();
+        this.cargarDatos();
+      })
+      .catch(error => {
+        console.error('Error al editar relación:', error);
+        this.errorMessage = 'Error al editar la relación';
+      });
+  }
+
+  eliminarRelacion(item: any, confirmar = true): Promise<void> {
+    if (confirmar && !confirm('¿Eliminar esta relación permanentemente?')) {
+      return Promise.reject('Operación cancelada');
+    }
+
+    const producto = this.productos.find(p => p.id === item.productoId);
+    if (!producto) return Promise.reject('Producto no encontrado');
+
+    const updatedProducto: Producto = {
+      ...producto,
+      clienteIds: producto.clienteIds?.filter(id => id !== item.clienteId) || []
+    };
+
+    return this.productoService.modificarProducto(updatedProducto)
+      .then(() => {
+        if (confirmar) {
+          this.cargarDatos();
+        }
+      })
+      .catch(error => {
+        console.error('Error al eliminar relación:', error);
+        this.errorMessage = 'Error al eliminar la relación';
+        throw error;
+      });
   }
 
   openClienteForm(cliente?: Cliente): void {
@@ -193,99 +262,126 @@ export class RelacionComponent implements OnInit {
     this.errorMessage = null;
   }
 
-  async submitForm(): Promise<void> {
-    try {
-      this.errorMessage = null;
+  submitForm(): void {
+    this.errorMessage = null;
 
-      if (this.currentView === 'clientes') {
-        const numeroCliente = parseInt(this.registroForm.nCliente || '0');
-        if (isNaN(numeroCliente)) {
-          this.errorMessage = 'El número de cliente debe ser un valor numérico';
+    if (this.currentView === 'clientes') {
+      const numeroCliente = parseInt(this.registroForm.nCliente || '0');
+      if (isNaN(numeroCliente)) {
+        this.errorMessage = 'El número de cliente debe ser un valor numérico';
+        return;
+      }
+
+      if (this.formType === 'create') {
+        const existeCliente = this.clientes.some(c => c.nCliente === this.registroForm.nCliente);
+        if (existeCliente) {
+          this.errorMessage = 'El número de cliente ya existe';
           return;
         }
 
-        if (this.formType === 'create') {
-          const existeCliente = this.clientes.some(c => c.nCliente === this.registroForm.nCliente);
-          if (existeCliente) {
-            this.errorMessage = 'El número de cliente ya existe';
-            return;
-          }
-
-          await this.clienteService.agregarCliente({
-            nCliente: this.registroForm.nCliente || '',
-            nombre: this.registroForm.nombre || ''
-          });
-        } else if (this.registroForm.id) {
-          await this.clienteService.modificarCliente({
-            id: this.registroForm.id,
-            nCliente: this.registroForm.nCliente || '',
-            nombre: this.registroForm.nombre || ''
-          });
-        }
+        this.clienteService.agregarCliente({
+          nCliente: this.registroForm.nCliente || '',
+          nombre: this.registroForm.nombre || ''
+        })
+        .then(() => {
+          this.closeForm();
+          this.cargarDatos();
+        })
+        .catch(error => {
+          console.error('Error al guardar:', error);
+          this.errorMessage = 'Error al guardar los cambios. Verifica los datos.';
+        });
+      } else if (this.registroForm.id) {
+        this.clienteService.modificarCliente({
+          id: this.registroForm.id,
+          nCliente: this.registroForm.nCliente || '',
+          nombre: this.registroForm.nombre || ''
+        })
+        .then(() => {
+          this.closeForm();
+          this.cargarDatos();
+        })
+        .catch(error => {
+          console.error('Error al guardar:', error);
+          this.errorMessage = 'Error al guardar los cambios. Verifica los datos.';
+        });
       }
-      else if (this.currentView === 'panaderia') {
-        if (this.formType === 'create') {
-          await this.productoService.agregarProducto({
+    } else if (this.currentView === 'panaderia') {
+      if (this.formType === 'create') {
+        this.productoService.agregarProducto({
+          descripcion: this.registroForm.descripcion || '',
+          precio: this.registroForm.precio || 0,
+          clienteIds: []
+        })
+        .then(() => {
+          this.closeForm();
+          this.cargarDatos();
+        })
+        .catch(error => {
+          console.error('Error al guardar:', error);
+          this.errorMessage = 'Error al guardar los cambios. Verifica los datos.';
+        });
+      } else if (this.registroForm.id) {
+        const productoExistente = this.productos.find(p => p.id === this.registroForm.id);
+        if (productoExistente) {
+          this.productoService.modificarProducto({
+            id: this.registroForm.id,
             descripcion: this.registroForm.descripcion || '',
             precio: this.registroForm.precio || 0,
-            clienteIds: []
+            clienteIds: productoExistente.clienteIds || []
+          })
+          .then(() => {
+            this.closeForm();
+            this.cargarDatos();
+          })
+          .catch(error => {
+            console.error('Error al guardar:', error);
+            this.errorMessage = 'Error al guardar los cambios. Verifica los datos.';
           });
-        } else if (this.registroForm.id) {
-          const productoExistente = this.productos.find(p => p.id === this.registroForm.id);
-          if (productoExistente) {
-            await this.productoService.modificarProducto({
-              id: this.registroForm.id,
-              descripcion: this.registroForm.descripcion || '',
-              precio: this.registroForm.precio || 0,
-              clienteIds: productoExistente.clienteIds || []
-            });
-          }
         }
       }
-
-      this.closeForm();
-      this.cargarDatos();
-    } catch (error) {
-      console.error('Error al guardar:', error);
-      this.errorMessage = 'Error al guardar los cambios. Verifica los datos.';
     }
   }
 
-  async deleteCliente(cliente: Cliente): Promise<void> {
+  deleteCliente(cliente: Cliente): void {
     if (!confirm('¿Eliminar este cliente y todas sus relaciones?')) return;
 
-    try {
-      // Primero eliminamos las relaciones
-      const productosRelacionados = this.productos.filter(p =>
-        p.clienteIds?.includes(cliente.id || '')
-      );
+    const productosRelacionados = this.productos.filter(p =>
+      p.clienteIds?.includes(cliente.id || '')
+    );
 
-      for (const producto of productosRelacionados) {
-        const updatedProducto: Producto = {
-          ...producto,
-          clienteIds: producto.clienteIds?.filter(id => id !== cliente.id) || []
-        };
-        await this.productoService.modificarProducto(updatedProducto);
-      }
+    const updatePromises = productosRelacionados.map(producto => {
+      const updatedProducto: Producto = {
+        ...producto,
+        clienteIds: producto.clienteIds?.filter(id => id !== cliente.id) || []
+      };
+      return this.productoService.modificarProducto(updatedProducto);
+    });
 
-      await this.clienteService.eliminarCliente(cliente);
-      this.cargarDatos();
-    } catch (error) {
-      console.error('Error al eliminar:', error);
-      this.errorMessage = 'Error al eliminar el cliente';
-    }
+    Promise.all(updatePromises)
+      .then(() => {
+        return this.clienteService.eliminarCliente(cliente);
+      })
+      .then(() => {
+        this.cargarDatos();
+      })
+      .catch(error => {
+        console.error('Error al eliminar:', error);
+        this.errorMessage = 'Error al eliminar el cliente';
+      });
   }
 
-  async deleteProducto(producto: Producto): Promise<void> {
+  deleteProducto(producto: Producto): void {
     if (!confirm('¿Eliminar este producto permanentemente?')) return;
 
-    try {
-      await this.productoService.eliminarProducto(producto);
-      this.cargarDatos();
-    } catch (error) {
-      console.error('Error al eliminar:', error);
-      this.errorMessage = 'Error al eliminar el producto';
-    }
+    this.productoService.eliminarProducto(producto)
+      .then(() => {
+        this.cargarDatos();
+      })
+      .catch(error => {
+        console.error('Error al eliminar:', error);
+        this.errorMessage = 'Error al eliminar el producto';
+      });
   }
 
   logout(): void {

@@ -1,74 +1,84 @@
 <div class="panaderia-container">
-  <!-- Menú superior -->
-  <div class="panaderia-menu">
-    <button class="btn btn-menu" [class.active]="currentView === 'combined'" (click)="changeView('combined')">
-      🏠 Vista Combinada
-    </button>
-    <button class="btn btn-menu" [class.active]="currentView === 'clientes'" (click)="changeView('clientes')">
-      👥 Clientes
-    </button>
-    <button class="btn btn-menu" [class.active]="currentView === 'panaderia'" (click)="changeView('panaderia')">
-      🍞 Panadería
-    </button>
-  </div>
+  <header class="panaderia-header">
+    <nav class="panaderia-menu">
 
-  <!-- Vista Combinada -->
-  @if (currentView === 'combined') {
-    <header class="panaderia-header">
-      <h1 class="panaderia-title">🍞 Relaciones Cliente-Producto 🥖</h1>
-    </header>
-
-    <div class="table-responsive">
-      <table class="table table-striped table-hover panaderia-table">
-        <thead class="table-dark">
-          <tr>
-            <th>N° Cliente</th>
-            <th>Nombre Cliente</th>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of datosCombinados; track $index) {
-            <tr>
-              <td>{{ item.nCliente }}</td>
-              <td>{{ item.nombreCliente }}</td>
-              <td>{{ item.nombreProducto }}</td>
-              <td>{{ item.precio | currency }}</td>
-              <td>
-                <button (click)="eliminarRelacion(item)" class="btn btn-sm btn-danger">
-                  🗑️ Eliminar
-                </button>
-              </td>
-            </tr>
-          }
-          @if (datosCombinados.length === 0) {
-            <tr>
-              <td colspan="5" class="text-center">No hay relaciones creadas</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="text-center my-4">
-      <button (click)="openRelacionForm()" class="btn btn-insertar">
-        🔗 Crear Nueva Relación
+      <button class="btn-menu" [class.active]="currentView === 'combined'" (click)="changeView('combined')">
+         Compras
       </button>
+      <button class="btn-menu" [class.active]="currentView === 'clientes'" (click)="changeView('clientes')">
+        Clientes
+      </button>
+      <button class="btn-menu" [class.active]="currentView === 'panaderia'" (click)="changeView('panaderia')">
+        Productos
+      </button>
+    </nav>
+  </header>
+
+
+    <div class="banner-container">
+      <img src="https://www.elglobo.com.mx/cdn/shop/files/ONL_EL_GLOBO_Banner_sitio_Tienda_en_linea_Desktop_1600x.jpg?v=1634342406"
+           alt="Banner El Globo"
+           class="banner-img">
     </div>
-  }
 
-  <!-- Vista de Clientes -->
-  @if (currentView === 'clientes') {
-    <div class="clientes-view">
-      <header class="panaderia-header">
-        <h1 class="panaderia-title">👥 Gestión de Clientes</h1>
-      </header>
+  <h1 class="page-title">
+    @switch (currentView) {
+      @case ('combined') {Compras }
+      @case ('clientes') { Clientes }
+      @case ('panaderia') {Productos }
+    }
+  </h1>
 
+  <div class="main-content">
+    @if (currentView === 'combined') {
       <div class="table-responsive">
-        <table class="table table-striped table-hover panaderia-table">
-          <thead class="table-dark">
+        <table class="panaderia-table">
+          <thead>
+            <tr>
+              <th>N° Cliente</th>
+              <th>Nombre Cliente</th>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of datosCombinados; track $index) {
+              <tr>
+                <td>{{ item.nCliente }}</td>
+                <td>{{ item.nombreCliente }}</td>
+                <td>{{ item.nombreProducto }}</td>
+                <td>{{ item.precio | currency }}</td>
+                <td>
+                  <button (click)="openEditarRelacionForm(item)" class="btn btn-sm btn-warning me-2" style="background-color: #6d1a1a; color: white;">
+                     Editar
+                  </button>
+                  <button (click)="eliminarRelacion(item)" class="btn btn-sm btn-danger">
+                     Eliminar
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (datosCombinados.length === 0) {
+              <tr>
+                <td colspan="5" class="text-center">No hay relaciones creadas</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-center my-4">
+        <button (click)="openRelacionForm()" class="btn-insertar">
+          🔗 Crear Nueva Relación
+        </button>
+      </div>
+    }
+
+    @if (currentView === 'clientes') {
+      <div class="table-responsive">
+        <table class="panaderia-table">
+          <thead>
             <tr>
               <th>N° Cliente</th>
               <th>Nombre</th>
@@ -82,7 +92,7 @@
                 <td>{{ cliente.nombre }}</td>
                 <td>
                   <button (click)="openClienteForm(cliente)" class="btn btn-sm btn-warning me-2">
-                    ✏️ Editar
+                     Editar
                   </button>
                   <button (click)="deleteCliente(cliente)" class="btn btn-sm btn-danger">
                     🗑️ Eliminar
@@ -95,23 +105,16 @@
       </div>
 
       <div class="text-center my-4">
-        <button (click)="openClienteForm()" class="btn btn-insertar">
-          👥 Agregar Nuevo Cliente
+        <button (click)="openClienteForm()" class="btn-insertar">
+          Agregar cliente
         </button>
       </div>
-    </div>
-  }
+    }
 
-  <!-- Vista de Panadería -->
-  @if (currentView === 'panaderia') {
-    <div class="panaderia-view">
-      <header class="panaderia-header">
-        <h1 class="panaderia-title">🍞 Gestión de Productos</h1>
-      </header>
-
+    @if (currentView === 'panaderia') {
       <div class="table-responsive">
-        <table class="table table-striped table-hover panaderia-table">
-          <thead class="table-dark">
+        <table class="panaderia-table">
+          <thead>
             <tr>
               <th>Producto</th>
               <th>Precio</th>
@@ -125,10 +128,10 @@
                 <td>{{ producto.precio | currency }}</td>
                 <td>
                   <button (click)="openProductoForm(producto)" class="btn btn-sm btn-warning me-2">
-                    ✏️ Editar
+                     Editar
                   </button>
                   <button (click)="deleteProducto(producto)" class="btn btn-sm btn-danger">
-                    🗑️ Eliminar
+                     Eliminar
                   </button>
                 </td>
               </tr>
@@ -138,15 +141,14 @@
       </div>
 
       <div class="text-center my-4">
-        <button (click)="openProductoForm()" class="btn btn-insertar">
-          🍞 Agregar Nuevo Producto
+        <button (click)="openProductoForm()" class="btn-insertar">
+          Agregar producto
         </button>
       </div>
-    </div>
-  }
+    }
+  </div>
 
-  <!-- Botón de cerrar sesión -->
-  <button (click)="logout()" class="btn btn-logout">
+  <button (click)="logout()" class="btn-logout">
     🔒 Cerrar Sesión
   </button>
 
@@ -154,14 +156,13 @@
     <div class="alert alert-danger">{{ errorMessage }}</div>
   }
 
-  <!-- Modal para relacionar productos con clientes -->
   @if (showRelacionForm) {
-    <div class="modal panaderia-modal" style="display: block; background: rgba(0,0,0,0.5)">
+    <div class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-brown text-white">
+          <div class="modal-header">
             <h5 class="modal-title">🔗 Relacionar Producto con Cliente</h5>
-            <button (click)="showRelacionForm = false" class="btn-close btn-close-white"></button>
+            <button (click)="showRelacionForm = false" class="btn-close">&times;</button>
           </div>
           <div class="modal-body">
             <form (submit)="relacionarProductoCliente()">
@@ -202,16 +203,64 @@
     </div>
   }
 
-  <!-- Modal para clientes -->
-  @if (showForm && currentView === 'clientes') {
-    <div class="modal panaderia-modal" style="display: block; background: rgba(0,0,0,0.5)">
+  @if (showEditarRelacionForm) {
+    <div class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-brown text-white">
+          <div class="modal-header">
+            <h5 class="modal-title"> Editar Relación</h5>
+            <button (click)="closeEditarRelacionForm()" class="btn-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form (submit)="guardarRelacionEditada()">
+              <div class="mb-3">
+                <label class="form-label">Cliente:</label>
+                <select class="form-control" [(ngModel)]="relacionEditada.clienteId" name="clienteId" required>
+                  <option value="">Seleccione un cliente</option>
+                  @for (cliente of clientes; track cliente.id) {
+                    <option [value]="cliente.id" [selected]="cliente.id === relacionEditada.clienteId">
+                      {{ cliente.nCliente }} - {{ cliente.nombre }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Producto:</label>
+                <select class="form-control" [(ngModel)]="relacionEditada.productoId" name="productoId" required>
+                  <option value="">Seleccione un producto</option>
+                  @for (producto of productos; track producto.id) {
+                    <option [value]="producto.id" [selected]="producto.id === relacionEditada.productoId">
+                      {{ producto.descripcion }} - {{ producto.precio | currency }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <div class="text-end">
+                <button type="button" (click)="closeEditarRelacionForm()" class="btn btn-secondary me-2">
+                  ❌ Cancelar
+                </button>
+                <button type="submit" class="btn btn-success">
+                  💾 Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showForm && currentView === 'clientes') {
+    <div class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
             <h5 class="modal-title">
-              {{ formType === 'create' ? '👥 Nuevo Cliente' : '✏️ Editar Cliente' }}
+              {{ formType === 'create' ? '👥 Nuevo Cliente' : ' Editar Cliente' }}
             </h5>
-            <button (click)="closeForm()" class="btn-close btn-close-white"></button>
+            <button (click)="closeForm()" class="btn-close">&times;</button>
           </div>
           <div class="modal-body">
             <form (submit)="submitForm()">
@@ -242,16 +291,15 @@
     </div>
   }
 
-  <!-- Modal para productos -->
   @if (showForm && currentView === 'panaderia') {
-    <div class="modal panaderia-modal" style="display: block; background: rgba(0,0,0,0.5)">
+    <div class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-brown text-white">
+          <div class="modal-header">
             <h5 class="modal-title">
-              {{ formType === 'create' ? '🍞 Nuevo Producto' : '✏️ Editar Producto' }}
+              {{ formType === 'create' ? '🍞 Nuevo Producto' : ' Editar Producto' }}
             </h5>
-            <button (click)="closeForm()" class="btn-close btn-close-white"></button>
+            <button (click)="closeForm()" class="btn-close">&times;</button>
           </div>
           <div class="modal-body">
             <form (submit)="submitForm()">
