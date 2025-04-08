@@ -19,7 +19,7 @@ export class ClienteService {
     const docRef = await addDoc(clientesCollection, {
       nCliente: cliente.nCliente,
       nombre: cliente.nombre,
-
+      metodo: cliente.metodo // Añadido el campo metodo
     });
     return { id: docRef.id, ...cliente };
   }
@@ -30,7 +30,7 @@ export class ClienteService {
     await updateDoc(documentRef, {
       nCliente: cliente.nCliente,
       nombre: cliente.nombre,
-
+      metodo: cliente.metodo // Añadido el campo metodo
     });
   }
 

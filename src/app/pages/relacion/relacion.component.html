@@ -16,12 +16,11 @@
     </nav>
   </header>
 
-
-    <div class="banner-container">
-      <img src="https://www.elglobo.com.mx/cdn/shop/files/ONL_EL_GLOBO_Banner_sitio_Tienda_en_linea_Desktop_1600x.jpg?v=1634342406"
-           alt="Banner El Globo"
-           class="banner-img">
-    </div>
+  <div class="banner-container">
+    <img src="https://www.elglobo.com.mx/cdn/shop/files/ONL_EL_GLOBO_Banner_sitio_Tienda_en_linea_Desktop_1600x.jpg?v=1634342406"
+         alt="Banner El Globo"
+         class="banner-img">
+  </div>
 
   <h1 class="page-title">
     @switch (currentView) {
@@ -41,7 +40,8 @@
               <th>Nombre Cliente</th>
               <th>Producto</th>
               <th>Precio</th>
-              <th>Acciones</th>
+              <th>Método de pago</th>
+              <th>Opciones:</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +51,7 @@
                 <td>{{ item.nombreCliente }}</td>
                 <td>{{ item.nombreProducto }}</td>
                 <td>{{ item.precio | currency }}</td>
+                <td>{{ item.metodoCliente }}</td>
                 <td>
                   <button (click)="openEditarRelacionForm(item)" class="btn btn-sm btn-warning me-2" style="background-color: #6d1a1a; color: white;">
                      Editar
@@ -63,7 +64,7 @@
             }
             @if (datosCombinados.length === 0) {
               <tr>
-                <td colspan="5" class="text-center">No hay relaciones creadas</td>
+                <td colspan="6" class="text-center">No hay relaciones creadas</td>
               </tr>
             }
           </tbody>
@@ -72,7 +73,7 @@
 
       <div class="text-center my-4">
         <button (click)="openRelacionForm()" class="btn-insertar">
-          🔗 Añadir nueva compra
+           Añadir nueva compra
         </button>
       </div>
     }
@@ -84,7 +85,8 @@
             <tr>
               <th>N° Cliente</th>
               <th>Nombre</th>
-              <th>Acciones</th>
+              <th>Método de pago</th>
+              <th>Opciones:</th>
             </tr>
           </thead>
           <tbody>
@@ -92,12 +94,13 @@
               <tr>
                 <td>{{ cliente.nCliente }}</td>
                 <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.metodo }}</td>
                 <td>
                   <button (click)="openClienteForm(cliente)" class="btn btn-sm btn-warning me-2">
                      Editar
                   </button>
                   <button (click)="deleteCliente(cliente)" class="btn btn-sm btn-danger">
-                    🗑️ Eliminar
+                    Eliminar
                   </button>
                 </td>
               </tr>
@@ -151,7 +154,7 @@
   </div>
 
   <button (click)="logout()" class="btn-logout">
-    🔒 Cerrar Sesión
+     Cerrar Sesión
   </button>
 
   @if (errorMessage) {
@@ -163,7 +166,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">🔗 Relacionar Producto con Cliente</h5>
+            <h5 class="modal-title">Elige la compra:</h5>
             <button (click)="showRelacionForm = false" class="btn-close">&times;</button>
           </div>
           <div class="modal-body">
@@ -174,7 +177,7 @@
                   <option value="">Seleccione un cliente</option>
                   @for (cliente of clientes; track cliente.id) {
                     <option [value]="cliente.id">
-                      {{ cliente.nCliente }} - {{ cliente.nombre }}
+                      {{ cliente.nCliente }} - {{ cliente.nombre }} - {{ cliente.metodo }}
                     </option>
                   }
                 </select>
@@ -192,10 +195,10 @@
 
               <div class="text-end">
                 <button type="button" (click)="showRelacionForm = false" class="btn btn-secondary me-2">
-                  ❌ Cancelar
+                   Cancelar
                 </button>
                 <button type="submit" class="btn btn-success">
-                  🔗 Relacionar
+                   Confirmar compra
                 </button>
               </div>
             </form>
@@ -221,7 +224,7 @@
                   <option value="">Seleccione un cliente</option>
                   @for (cliente of clientes; track cliente.id) {
                     <option [value]="cliente.id" [selected]="cliente.id === relacionEditada.clienteId">
-                      {{ cliente.nCliente }} - {{ cliente.nombre }}
+                      {{ cliente.nCliente }} - {{ cliente.nombre }} - {{ cliente.metodo }}
                     </option>
                   }
                 </select>
@@ -276,6 +279,12 @@
                 <label class="form-label">Nombre Cliente:</label>
                 <input type="text" class="form-control" [(ngModel)]="registroForm.nombre"
                        name="nombre" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Método de pago:</label>
+                <input type="text" class="form-control" [(ngModel)]="registroForm.metodo"
+                       name="metodo" required>
               </div>
 
               <div class="text-end">

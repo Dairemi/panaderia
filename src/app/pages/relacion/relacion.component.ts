@@ -14,6 +14,7 @@ interface RegistroForm {
   nombre?: string;
   descripcion?: string;
   precio?: number;
+  metodo?: string;
 }
 
 @Component({
@@ -94,6 +95,7 @@ export class RelacionComponent implements OnInit {
               nombreProducto: producto.descripcion,
               precio: producto.precio,
               productoData: producto,
+              metodoCliente: cliente.metodo,
               clienteData: cliente
             });
           }
@@ -239,7 +241,8 @@ export class RelacionComponent implements OnInit {
     this.registroForm = {
       id: cliente?.id,
       nCliente: cliente?.nCliente || this.nextClienteNumber.toString(),
-      nombre: cliente?.nombre || ''
+      nombre: cliente?.nombre || '',
+      metodo: cliente?.metodo || ''
     };
     this.showForm = true;
   }
@@ -272,6 +275,11 @@ export class RelacionComponent implements OnInit {
         return;
       }
 
+      if (!this.registroForm.nombre || !this.registroForm.metodo) {
+        this.errorMessage = 'Nombre y Método de pago son obligatorios';
+        return;
+      }
+
       if (this.formType === 'create') {
         const existeCliente = this.clientes.some(c => c.nCliente === this.registroForm.nCliente);
         if (existeCliente) {
@@ -281,7 +289,8 @@ export class RelacionComponent implements OnInit {
 
         this.clienteService.agregarCliente({
           nCliente: this.registroForm.nCliente || '',
-          nombre: this.registroForm.nombre || ''
+          nombre: this.registroForm.nombre || '',
+          metodo: this.registroForm.metodo || ''
         })
         .then(() => {
           this.closeForm();
@@ -295,7 +304,8 @@ export class RelacionComponent implements OnInit {
         this.clienteService.modificarCliente({
           id: this.registroForm.id,
           nCliente: this.registroForm.nCliente || '',
-          nombre: this.registroForm.nombre || ''
+          nombre: this.registroForm.nombre || '',
+          metodo: this.registroForm.metodo || ''
         })
         .then(() => {
           this.closeForm();
